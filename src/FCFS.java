@@ -18,7 +18,7 @@ public class FCFS {
     }
 
     private void SmallestTimeJoined() {
-        int time = 999999999;
+        int time = Integer.MAX_VALUE;
 
         Iterator<Task> iterator = this.tasks.iterator();
         while(iterator.hasNext()) {
