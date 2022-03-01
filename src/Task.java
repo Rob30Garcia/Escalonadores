@@ -13,4 +13,11 @@ public class Task {
         this.priority = Integer.parseInt(infos[3]);
         this.typeProcess = Integer.parseInt(infos[4]);
     }
+
+    public String getDescription() {
+        String description = String.format("%s %d %d %d %d",
+                this.name, this.joined, this.duration, this.priority, this.typeProcess);
+
+        return description;
+    }
 }
