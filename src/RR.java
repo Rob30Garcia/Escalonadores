@@ -4,6 +4,7 @@ import java.util.Iterator;
 public class RR {
     private int quantum;
     private final ArrayList<Task> tasks = new ArrayList<Task>();
+    private final ArrayList<Task> tasksCopy = new ArrayList<Task>();
     private ArrayList<Schedule> scheduleOfTimeFinal = new ArrayList<Schedule>();
 
     public RR(ArrayList<String> tasks, int quantum) {
@@ -12,6 +13,7 @@ public class RR {
             String task = iterator.next();
             Task TaskConverted = new Task(task);
             this.tasks.add(TaskConverted);
+            this.tasksCopy.add(TaskConverted);
         }
 
         this.quantum = quantum;
@@ -104,6 +106,37 @@ public class RR {
        }
     }
 
+    private void executionTimeOfTask() {
+        Iterator<Task> iterator = this.tasksCopy.iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            Iterator<Schedule> iteratorSchedule = this.scheduleOfTimeFinal.iterator();
+            while(iteratorSchedule.hasNext()) {
+                Schedule scheduleOfTask = iteratorSchedule.next();
+                if(task.name == scheduleOfTask.task) {
+                    task.executionTime = scheduleOfTask.timeFinal;
+                }
+            }
+        }
+    }
+
+    public double averageExecutionTime() {
+        this.executionTimeOfTask();
+
+        double sum = 0;
+        double average = 0;
+
+        Iterator<Task> iterator = this.tasksCopy.iterator();
+        while(iterator.hasNext()) {
+            Task task = iterator.next();
+            sum = sum + (task.executionTime - task.joined);
+        }
+
+        average = sum/(double) this.tasksCopy.size();
+
+        return average;
+    }
+
     public String getScheduleDescription() {
         String schedule = "";
 
@@ -131,7 +164,7 @@ public class RR {
     public String getDescription() {
         String tasks = "";
 
-        Iterator<Task> iterator = this.tasks.iterator();
+        Iterator<Task> iterator = this.tasksCopy.iterator();
         while(iterator.hasNext()) {
             Task task = iterator.next();
             tasks = tasks + String.format("%s %d %d %d %d\n",

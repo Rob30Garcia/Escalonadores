@@ -35,6 +35,8 @@ public class EscalonadoresMain {
 
         System.out.println(SchedulerTwo.getScheduleTasksDescription());
 
+        System.out.println(SchedulerTwo.averageExecutionTime());
+
         scan.close();
     }
 }
