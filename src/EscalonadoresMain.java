@@ -21,25 +21,35 @@ public class EscalonadoresMain {
             lineOfInput = br.readLine();
         }
 
-//        FCFS SchedulerOne = new FCFS(tasks);
-//
-//        System.out.println(SchedulerOne.averageExecutionTime());
-//        System.out.println(SchedulerOne.averageWaitingTime());
+        System.out.println("Escolha um dos escalonadores: 1 - FCFS | 2 - RR | 3 - SJF");
+        int escolha = scan.nextInt();
+        if(escolha == 1) {
+            FCFS SchedulerOne = new FCFS(tasks);
 
-        System.out.print("Digite o quantum: ");
-        int quantum = scan.nextInt();
+            System.out.println(SchedulerOne.averageExecutionTime());
+            System.out.println(SchedulerOne.averageWaitingTime());
+        } else if (escolha == 2) {
+            System.out.print("Digite o quantum: ");
+            int quantum = scan.nextInt();
 
-        RR SchedulerTwo = new RR(tasks, quantum);
+            RR SchedulerTwo = new RR(tasks, quantum);
 
-        SchedulerTwo.executionAll();
+            SchedulerTwo.executionAll();
 
-        System.out.println(SchedulerTwo.getScheduleTasksDescription());
+            System.out.println(SchedulerTwo.getScheduleTasksDescription());
 
-        System.out.println(SchedulerTwo.averageExecutionTime());
+            System.out.println(SchedulerTwo.averageExecutionTime());
 
-        System.out.println(SchedulerTwo.averageWaitingTime());
+            System.out.println(SchedulerTwo.averageWaitingTime());
 
-        //System.out.println(SchedulerTwo.getDescription());
+        } else if(escolha == 3) {
+            SJF sfc = new SJF(tasks);
+
+            System.out.println(sfc.getScheduleTasksDescription());
+            System.out.println(sfc.averageExecutionTime());
+            System.out.println(sfc.averageWaitingTime());
+
+        }
 
         scan.close();
     }
