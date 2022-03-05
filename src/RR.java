@@ -1,3 +1,7 @@
+/* *
+ * A Classe para o Escalonador Round Robin
+ * */
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +13,7 @@ public class RR {
     private ArrayList<Schedule> scheduleOfTimeFinal = new ArrayList<Schedule>();
     private ArrayList<Schedule> scheduleCopy = new ArrayList<Schedule>();
 
+    //construtor da classe, onde é armazenado o quantum
     public RR(ArrayList<String> tasks, int quantum) {
         Iterator<String> iterator = tasks.iterator();
         while(iterator.hasNext()) {
@@ -23,6 +28,7 @@ public class RR {
         this.SmallestTimeJoined();
     }
 
+    //Função que pega o menor tempo e armazenda na agenda como inicio. Porém no Round Robin tem o nome da tarefa armazenada
     private void SmallestTimeJoined() {
         int time = Integer.MAX_VALUE;
         String taskName = "";
@@ -41,6 +47,7 @@ public class RR {
         this.scheduleOfTimeFinal.add(first);
     }
 
+    //Função que executa uma task individualmente
     private Task executionTask(Task task) {
         int timeStart = this.scheduleOfTimeFinal.get(this.scheduleOfTimeFinal.size() - 1).timeFinal;
 
@@ -50,6 +57,9 @@ public class RR {
             timeStart = task.joined;
         }
 
+        //compara a duração com o quantum, caso seja menor que o quantum ele armazenada na agenda e retorna null
+        //Isso para não ser reexecutada
+        //caso não seja menor a duração que o quantum, retorna a task com o tempo de duração menor
         if(task.duration <= this.quantum) {
             timeFinal = timeStart + task.duration;
 
@@ -72,6 +82,7 @@ public class RR {
         }
     }
 
+    //Executa todas as tarefas
     public void executionAll() {
        ArrayList<Task> tasks = this.tasks;
 
@@ -110,6 +121,7 @@ public class RR {
        }
     }
 
+    //Coloca os tempos finais nas tarefas para serem armazenados
     private void executionTimeOfTask() {
         Iterator<Task> iterator = this.tasksCopy.iterator();
         while (iterator.hasNext()) {
@@ -124,6 +136,7 @@ public class RR {
         }
     }
 
+    //Depois de todas as tarefas executadas é pego a média do tempo de execução, sendo a execução menos a entrada
     public double averageExecutionTime() {
         this.executionTimeOfTask();
 
@@ -141,6 +154,8 @@ public class RR {
         return average;
     }
 
+    //Depois de executado precisamos pegar os tempos de espera, nesse caso precisou de uma flag para pega o primeiro valor da agenda
+    //Isso preciso para não ter uma duplicação das tarefas quando procurasse na agenda.
     public double averageWaitingTime() {
         ArrayList<Schedule> schedule = this.scheduleCopy;
 
@@ -151,6 +166,7 @@ public class RR {
         while(iterator.hasNext()) {
             Task task = iterator.next();
 
+            //para haver troca de valores
             int firstTime = task.joined;
             int secondTime = 0;
 
@@ -176,6 +192,7 @@ public class RR {
         return average;
     }
 
+    //Descrição da agenda
     public String getScheduleDescription() {
         String schedule = "";
 
@@ -190,6 +207,7 @@ public class RR {
         return schedule;
     }
 
+    //Descrição da agenda por tarefa
     public String getScheduleTasksDescription() {
         String schedule = "";
 
@@ -204,6 +222,7 @@ public class RR {
         return schedule;
     }
 
+    //Descrição das tarefas
     public String getDescription() {
         String tasks = "";
 
