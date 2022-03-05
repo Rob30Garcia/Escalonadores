@@ -5,6 +5,7 @@ public class Task {
     public int priority;
     public int typeProcess;
     public double executionTime;
+    public double waitingTime;
 
     public Task(String task) {
         String[] infos = task.split(" ");
@@ -14,11 +15,12 @@ public class Task {
         this.priority = Integer.parseInt(infos[3]);
         this.typeProcess = Integer.parseInt(infos[4]);
         this.executionTime = 0;
+        this.waitingTime = 0;
     }
 
     public String getDescription() {
-        String description = String.format("%s %d %d %d %d %.2f",
-                this.name, this.joined, this.duration, this.priority, this.typeProcess, this.executionTime);
+        String description = String.format("%s %d %d %d %d %.2f %.2f",
+                this.name, this.joined, this.duration, this.priority, this.typeProcess, this.executionTime, this.waitingTime);
 
         return description;
     }
