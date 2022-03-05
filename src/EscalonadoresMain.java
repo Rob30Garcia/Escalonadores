@@ -37,6 +37,10 @@ public class EscalonadoresMain {
 
         System.out.println(SchedulerTwo.averageExecutionTime());
 
+        System.out.println(SchedulerTwo.averageWaitingTime());
+
+        //System.out.println(SchedulerTwo.getDescription());
+
         scan.close();
     }
 }

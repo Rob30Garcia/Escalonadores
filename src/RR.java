@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class RR {
     private int quantum;
     private final ArrayList<Task> tasks = new ArrayList<Task>();
     private final ArrayList<Task> tasksCopy = new ArrayList<Task>();
     private ArrayList<Schedule> scheduleOfTimeFinal = new ArrayList<Schedule>();
+    private ArrayList<Schedule> scheduleCopy = new ArrayList<Schedule>();
 
     public RR(ArrayList<String> tasks, int quantum) {
         Iterator<String> iterator = tasks.iterator();
@@ -54,6 +56,7 @@ public class RR {
             Schedule newSchedule = new Schedule(timeFinal, task.name);
 
             this.scheduleOfTimeFinal.add(newSchedule);
+            this.scheduleCopy.add(newSchedule);
 
             return null;
         } else {
@@ -63,6 +66,7 @@ public class RR {
             Schedule newSchedule = new Schedule(timeFinal, task.name);
 
             this.scheduleOfTimeFinal.add(newSchedule);
+            this.scheduleCopy.add(newSchedule);
 
             return task;
         }
@@ -137,10 +141,47 @@ public class RR {
         return average;
     }
 
+    public double averageWaitingTime() {
+        ArrayList<Schedule> schedule = this.scheduleCopy;
+
+        double average = 0;
+        double sum = 0;
+        int flag = 0;
+        Iterator<Task> iterator = this.tasksCopy.iterator();
+        while(iterator.hasNext()) {
+            Task task = iterator.next();
+
+            int firstTime = task.joined;
+            int secondTime = 0;
+
+            int i = 1;
+            while(i < schedule.size()){
+                if(task.name == schedule.get(i).task && firstTime < schedule.get(i).timeFinal) {
+                    secondTime = schedule.get(i - 1).timeFinal;
+                    task.waitingTime = task.waitingTime + secondTime - firstTime;
+                    firstTime = schedule.get(i).timeFinal;
+                }
+                i++;
+            }
+
+            if(flag == 0) {
+                task.waitingTime = task.waitingTime - this.quantum;
+                flag = 1;
+            }
+
+            sum = sum + task.waitingTime;
+        }
+
+        average = sum / (double) this.tasksCopy.size();
+        return average;
+    }
+
     public String getScheduleDescription() {
         String schedule = "";
 
-        Iterator<Schedule> iterator = this.scheduleOfTimeFinal.iterator();
+        List<Schedule> scheduleToDescription = this.scheduleOfTimeFinal.subList(1, this.scheduleOfTimeFinal.size());
+
+        Iterator<Schedule> iterator = scheduleToDescription.iterator();
         while(iterator.hasNext()) {
             Schedule noteInSchedule = iterator.next();
             schedule = schedule + noteInSchedule.getDescription();
@@ -152,7 +193,9 @@ public class RR {
     public String getScheduleTasksDescription() {
         String schedule = "";
 
-        Iterator<Schedule> iterator = this.scheduleOfTimeFinal.iterator();
+        List<Schedule> scheduleToDescription = this.scheduleOfTimeFinal.subList(1, this.scheduleOfTimeFinal.size());
+
+        Iterator<Schedule> iterator = scheduleToDescription.iterator();
         while(iterator.hasNext()) {
             Schedule noteInSchedule = iterator.next();
             schedule = schedule + noteInSchedule.getTaskDescription();
@@ -167,8 +210,7 @@ public class RR {
         Iterator<Task> iterator = this.tasksCopy.iterator();
         while(iterator.hasNext()) {
             Task task = iterator.next();
-            tasks = tasks + String.format("%s %d %d %d %d\n",
-                    task.name, task.joined, task.duration, task.priority, task.typeProcess);
+            tasks = tasks + task.getDescription() + "\n";
         }
 
         return tasks;
